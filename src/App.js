@@ -1,10 +1,16 @@
 import React from 'react'
-import { Counter } from './features/counter/Counter'
+import Footer from './components/Footer';
+import HomePage from './pages/HomePage'
+import SignInPage from './pages/SignInPage';
+import UserPage from './pages/UserPage';
 
 function App() {
   return (
     <div className="App">
-        <Counter />
+      <HomePage />
+      <SignInPage />
+      <UserPage />
+      <Footer />
     </div>
   );
 }
