@@ -1,27 +1,29 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import argentBankLogo from "../assets/argentBankLogo.png"
+import Footer from '../components/Footer'
 
 function UserPage() {
   return (
     <>
       <nav className="main-nav">
-      <div className="main-nav-logo">
+      <Link to='/' className="main-nav-logo">
         <img
           className="main-nav-logo-image"
           src={argentBankLogo}
           alt="Argent Bank Logo"
         />
         <h1 className="sr-only">Argent Bank</h1>
-      </div>
+      </Link>
       <div>
-        <div className="main-nav-item">
+        <Link to="/user" className="main-nav-item">
           <i className="fa fa-user-circle"></i>
           Tony
-        </div>
-        <div className="main-nav-item">
+        </Link>
+        <Link to="/" className="main-nav-item">
           <i className="fa fa-sign-out"></i>
           Sign Out
-        </div>
+        </Link>
       </div>
     </nav>
     <main className="main bg-dark">
@@ -61,6 +63,7 @@ function UserPage() {
         </div>
       </section>
     </main>
+    <Footer />
     </>
   );
 }

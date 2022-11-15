@@ -3,26 +3,28 @@ import argentBankLogo from "../assets/argentBankLogo.png"
 import iconChat from "../assets/icon-chat.png"
 import iconMoney from "../assets/icon-money.png"
 import iconSecurity from "../assets/icon-security.png"
+import {Link} from "react-router-dom"
+import Footer from '../components/Footer'
 
 function HomePage() {
   return (
     <>
       <nav className="main-nav">
-      <div className="main-nav-logo">
-        <img
-          className="main-nav-logo-image"
-          src={argentBankLogo}
-          alt="Argent Bank Logo"
-        />
-        <h1 className="sr-only">Argent Bank</h1>
-      </div>
-      <div>
-        <div className="main-nav-item">
-          <i className="fa fa-user-circle"></i>
-          Sign In
+        <Link to='/' className="main-nav-logo">
+          <img
+            className="main-nav-logo-image"
+            src={argentBankLogo}
+            alt="Argent Bank Logo"
+          />
+          <h1 className="sr-only">Argent Bank</h1>
+        </Link>
+        <div>
+          <Link to="/sign-in" className="main-nav-item">
+            <i className="fa fa-user-circle"></i>
+            Sign In
+          </Link>
         </div>
-      </div>
-    </nav>
+      </nav>
     <main>
       <div className="hero">
         <section className="hero-content">
@@ -68,6 +70,7 @@ function HomePage() {
         </div>
       </section>
     </main>
+    <Footer />
     </>
   );
 }

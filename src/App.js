@@ -1,18 +1,17 @@
 import React from 'react'
-import Footer from './components/Footer';
+import { Routes, Route } from "react-router-dom"
 import HomePage from './pages/HomePage'
-import SignInPage from './pages/SignInPage';
-import UserPage from './pages/UserPage';
+import SignInPage from './pages/SignInPage'
+import UserPage from './pages/UserPage'
 
 function App() {
   return (
-    <div className="App">
-      <HomePage />
-      <SignInPage />
-      <UserPage />
-      <Footer />
-    </div>
-  );
+      <Routes>
+        <Route path="/" element={ <HomePage /> } />
+        <Route path="/sign-in" element={ <SignInPage /> }/>
+        <Route path="/user" element={ <UserPage /> }/>
+      </Routes>
+  )
 }
 
-export default App;
+export default App
