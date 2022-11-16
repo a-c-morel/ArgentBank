@@ -1,4 +1,5 @@
 import React from 'react'
+import TransactionBtn from "./TransactionBtn"
 
 function AccountContent({ accountType }) {
   
@@ -11,9 +12,7 @@ function AccountContent({ accountType }) {
                   <p className="account-amount">$2,082.79</p>
                   <p className="account-amount-description">Available Balance</p>
                 </div>
-                <div className="account-content-wrapper cta">
-                  <button className="transaction-button">View transactions</button>
-                </div>
+                <TransactionBtn />
             </section>
           )
 
@@ -26,9 +25,7 @@ function AccountContent({ accountType }) {
                 <p className="account-amount">$10,928.42</p>
                 <p className="account-amount-description">Available Balance</p>
                 </div>
-                <div className="account-content-wrapper cta">
-                <button className="transaction-button">View transactions</button>
-                </div>
+                <TransactionBtn />
             </section>
         )
 
@@ -41,9 +38,7 @@ function AccountContent({ accountType }) {
                 <p className="account-amount">$184.30</p>
                 <p className="account-amount-description">Current Balance</p>
                 </div>
-                <div className="account-content-wrapper cta">
-                <button className="transaction-button">View transactions</button>
-                </div>
+                <TransactionBtn />
             </section>
         )
 
