@@ -26,6 +26,8 @@ html {
   
   .bg-dark {
     background-color: #12002b;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
   }
   
   .sr-only {
@@ -196,10 +198,12 @@ html {
     -webkit-box-sizing: border-box;
             box-sizing: border-box;
     background-color: white;
-    width: 300px;
+    min-width: 300px;
     margin: 0 auto;
-    margin-top: 3rem;
+    /*margin-top: 3rem;*/
     padding: 2rem;
+    height: 77vh;
+    width: 30vw
   }
   
   .sign-in-icon {
@@ -246,6 +250,10 @@ html {
             justify-content: center;
     border-top: 2px solid #ccc;
     padding: 2rem 0 1.5rem;
+    max-height: 4.781rem;
+    /*position: absolute;
+    bottom: 0;
+    width: 100vw;*/
   }
   
   .footer-text {
