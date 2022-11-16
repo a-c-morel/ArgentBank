@@ -2,8 +2,8 @@ import React from 'react'
 import {Link} from "react-router-dom"
 import argentBankLogo from "../assets/argentBankLogo.png"
 
-function Navbar() {
-  return (page===UserPage) ? (
+function Navbar({ page }) {
+  return ( page === "UserPage" ) ? (
     <nav className="main-nav">
       <Link to='/' className="main-nav-logo">
         <img
