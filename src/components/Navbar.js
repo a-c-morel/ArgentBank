@@ -1,12 +1,18 @@
 import React from 'react'
 import {Link} from "react-router-dom"
 import argentBankLogo from "../assets/argentBankLogo.png"
-import Logo from "./Logo"
 
 function Navbar({ page }) {
-  return ( page === "UserPage" ) ? (
+  return ( page === "ProfilePage" ) ? (
     <nav className="main-nav">
-      <Logo />
+      <Link to='/' className="main-nav-logo">
+        <img
+        className="main-nav-logo-image"
+        src={argentBankLogo}
+        alt="Argent Bank Logo"
+        />
+        <h1 className="sr-only">Argent Bank</h1>
+    </Link>
       <div>
         <Link to="/user" className="main-nav-item">
           <i className="fa fa-user-circle"></i>
@@ -29,7 +35,7 @@ function Navbar({ page }) {
           <h1 className="sr-only">Argent Bank</h1>
         </Link>
         <div>
-          <Link to="/sign-in" className="main-nav-item">
+          <Link to="/login" className="main-nav-item">
             <i className="fa fa-user-circle"></i>
             Sign In
           </Link>

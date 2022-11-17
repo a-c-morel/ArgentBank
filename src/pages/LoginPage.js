@@ -1,9 +1,13 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import Footer from '../components/Footer'
+import Navbar from '../components/Navbar';
 
-function SignInModal() {
+function LoginPage() {
   return (
-    <main className="main bg-dark">
+    <>
+      <Navbar page="LoginPage" />
+      <main className="main bg-dark">
       <section className="sign-in-content">
         <i className="fa fa-user-circle sign-in-icon"></i>
         <h1>Sign In</h1>
@@ -21,14 +25,16 @@ function SignInModal() {
             <label for="remember-me">Remember me</label>
           </div>
           {/**PLACEHOLDER DUE TO STATIC SITE**/}
-          <Link to="/user" className="sign-in-button">Sign In</Link>
+          <Link to="/profile" className="sign-in-button">Sign In</Link>
           {/**SHOULD BE THE BUTTON BELOW**/}
           {/**<button className="sign-in-button">Sign In</button>**/}
           {/****/}
         </form>
       </section>
     </main>
-  )
+      <Footer />
+    </>
+  );
 }
 
-export default SignInModal
+export default LoginPage

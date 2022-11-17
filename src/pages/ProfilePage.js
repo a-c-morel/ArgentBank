@@ -2,14 +2,16 @@ import React from 'react'
 import AccountContent from '../components/AccountContent';
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar';
-import UserHeader from '../components/UserHeader';
 
-function UserPage() {
+function ProfilePage() {
   return (
     <>
-      <Navbar page="UserPage" />
+      <Navbar page="ProfilePage" />
       <main className="main bg-dark">
-        <UserHeader name="Tony Jarvis"/>
+        <div className="header">
+          <h1>Welcome back<br />Tony Jarvis!</h1>
+          <button className="edit-button">Edit Name</button>
+        </div>
         <h2 className="sr-only">Accounts</h2>
         <AccountContent accountType="checking" />
         <AccountContent accountType="savings" />
@@ -20,4 +22,4 @@ function UserPage() {
   );
 }
 
-export default UserPage
+export default ProfilePage
