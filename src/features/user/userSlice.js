@@ -1,16 +1,16 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit" //, createAsyncThunk
 
-const axios = require('axios').default
+//const axios = require('axios').default
 
-export const signInUser = createAsyncThunk(
-    "user/signInUser",
+/*export const signInUser = createAsyncThunk(
+    "user/signInUser",*/
     /*
     pending: 'user/signInUser/pending'
     fulfilled: 'user/signInUser/fulfilled'
     rejected: 'user/signInUser/rejected'
     */
-    async ({ userEmail, password }, { rejectWithValue }) => {
-        try {
+    /*async ({ userEmail, password }, { rejectWithValue }) => {
+        try {*/
         // configure header's Content-Type as JSON
             /*const config = {
                 headers: {
@@ -18,7 +18,7 @@ export const signInUser = createAsyncThunk(
                 },
             }*/
         // make request to backend
-            await axios.post(
+            /*await axios.post(
                 '/user/login',
                 { userEmail, password }
                 //, config
@@ -32,21 +32,34 @@ export const signInUser = createAsyncThunk(
             }
         }
     }
-)
+)*/
 
 const userSlice = createSlice({
     name: 'user',
     initialState: {
         loading: false,
-        userInfo: {}, // for user object
-        userToken: null, // for storing the JWT
+        userName:"",
+        email: "",
+        password: "",
+        token: null, // for storing the JWT
         error: null,
-        success: false, // for monitoring the registration process.
+        success: false // for monitoring the registration process.
     },
 
-    reducers: {},
+    reducers: {
+        setUserName: (state, action) => {
+            let userName = action.payload
+            state.userName = userName
+            return state
+        },
+        setPassword: (state, action) => {
+            let password = action.payload
+             state.password = password
+             return state
+        }
+    },
 
-    extraReducers: {
+    /*extraReducers: {
     // register user
         [signInUser.pending]: (state) => {
             state.loading = true
@@ -60,9 +73,9 @@ const userSlice = createSlice({
             state.loading = false
             state.error = payload
         },
-    }
+    }*/
 })
 
-//export const { connectUser, disconnectUser, updateUserName } = userSlice.actions
+export const { setUserName, setPassword } = userSlice.actions
 
 export default userSlice.reducer

@@ -1,9 +1,17 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux'
+import { setUserName, setPassword } from '../features/user/userSlice'
 import Footer from '../components/Footer'
 import Navbar from '../components/Navbar';
 
 function LoginPage() {
+
+  const selectUser = state => state.user
+
+  const user = useSelector( selectUser )
+
+  const dispatch = useDispatch()
+
   return (
     <>
       <Navbar page="LoginPage" />
@@ -14,20 +22,20 @@ function LoginPage() {
         <form>
           <div className="input-wrapper">
             <label for="username">Username</label>
-            <input type="text" id="username" />
+            <input type="text" id="username" onChange={(e) => dispatch(setUserName(e.target.value))} />
           </div>
           <div className="input-wrapper">
             <label for="password">Password</label>
-            <input type="password" id="password" />
+            <input type="password" id="password" onChange={(e) => dispatch(setPassword(e.target.value))} />
           </div>
           <div className="input-remember">
             <input type="checkbox" id="remember-me" />
             <label for="remember-me">Remember me</label>
           </div>
           {/**PLACEHOLDER DUE TO STATIC SITE**/}
-          <Link to="/profile" className="sign-in-button">Sign In</Link>
+          {/*<Link to="/profile" className="sign-in-button">Sign In</Link>*/}
           {/**SHOULD BE THE BUTTON BELOW**/}
-          {/**<button className="sign-in-button">Sign In</button>**/}
+          <button className="sign-in-button" type='submit'>Sign In</button>
           {/****/}
         </form>
       </section>
@@ -38,3 +46,5 @@ function LoginPage() {
 }
 
 export default LoginPage
+
+// onSubmit={submitForm}
