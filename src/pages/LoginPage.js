@@ -1,49 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react' //, useEffect
 import { useDispatch } from 'react-redux' //, useSelector
-import Footer from '../components/Footer'
-import Navbar from '../components/Navbar'
-import { loginUser } from '../features/auth/authSlice' //, setEmail, setPassword
+import { loginUser } from '../features/auth/authSlice'
+import { useNavigate } from "react-router-dom"
+//import Navbar from '../components/Navbar'
 
 function LoginPage() {
 
+  //const auth = useSelector(state => state.auth)
+
   const dispatch = useDispatch()
-  /*const auth = useSelector((state) => state.auth)
-
-  const email = auth.email
-  console.log("email:", email)
-
-  const password = auth.password
-  console.log("password:", password)
-
-  const token = auth.token
-  console.log("token:", token)*/
-
+  const navigate = useNavigate()
   const [user, setUser] = useState(
     {
       email: "",
       password: "",
     }
   )
+  /*const [token, setToken] = useState(null)
+
+  useEffect(() => {
+    setToken(auth.token)
+  }, [auth.token, navigate, token])*/
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-
-    console.log(user);
-    dispatch(loginUser(user));
-  }
-
-  //const [email, setEmail] = useState("")
-  //const [password, setPassword] = useState("")
-
-  /*const handleSubmit = (e) => {
     e.preventDefault()
-    dispatch(loginUser(email, password))
-    console.log("myToken: ", token)
-  }*/
+    console.log(user)
+    dispatch(loginUser(user)).then(() => {
+      navigate('/profile')
+    }) 
+  }
 
   return (
     <>
-      <Navbar page="LoginPage" />
       <main className="main bg-dark">
         <section className="sign-in-content">
           <i className="fa fa-user-circle sign-in-icon"></i>
@@ -65,7 +53,6 @@ function LoginPage() {
           </form>
         </section>
       </main>
-      <Footer />
     </>
   );
 }

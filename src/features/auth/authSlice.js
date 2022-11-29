@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-//import axios from "axios"
 import { url } from "./api"
 
 const initialState = {
@@ -8,7 +7,9 @@ const initialState = {
     password: "",
     loginStatus: "",
     loginError: "",
-    userIsloggedIn: false
+    connectStatus: "",
+    connectError: "",
+    userIsLoggedIn: false
 }
 
 /*
@@ -36,34 +37,34 @@ export const loginUser = createAsyncThunk(
             .then((response) => response.json())
             .then((data) => {
                 console.log('Success:', data);
-                localStorage.setItem("token", data.body.token);
-                console.log(localStorage)
+                localStorage.setItem("token", JSON.stringify(data.body.token));
+                //console.log(localStorage)
             })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
 
-            /*
-            AXIOS (not working):
-            
-            const token = await axios.post( 
-                //1 = URL
-                `${url}/user/login`,
-                //2 = body
-                {
-                    "email": user.email,
-                    "password": user.password
-                },
-                //3 = headers
-                {
+        } catch ( error ) {
+
+            console.log(error)
+            return rejectWithValue(error.response.data)
+
+        }
+    }
+)
+
+export const connectUser = createAsyncThunk(
+    "auth/connectUser",
+    async ({ rejectWithValue }) => {
+        try {
+
+            const token = JSON.parse(localStorage.getItem('token'))
+
+            fetch(`${url}/user/profile`, {
+                    method: 'POST',
                     headers: {
-                        Accept: 'application/json',
-                        'content-type': 'application/json'
+                        'Authorization': `Bearer ${token}`
                     }
                 }
             )
-            
-            return token*/
+            .then((response) => response.json())
 
         } catch ( error ) {
 
@@ -78,7 +79,7 @@ const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        setEmail: (state, action) => {
+        /*setEmail: (state, action) => {
             let email = action.payload
             
             return {
@@ -92,21 +93,21 @@ const authSlice = createSlice({
                 ...state,
                 password: password
             }
-        }
+        }*/
     },
     extraReducers: (builder) => {
         builder.addCase( loginUser.pending, ( state ) =>
             {
-                return { ...state, loginStatus: "pending"}
+                return { loginStatus: "pending"}
             }
         )
         builder.addCase( loginUser.fulfilled, ( state, action ) =>
             {
                 return (
                     action.payload ? {
-                        ...state,
                         token: action.payload,
-                        loginStatus: "success"
+                        loginStatus: "success",
+                        userIsLoggedIn: true
                     } : state
                 )
             }
@@ -114,13 +115,37 @@ const authSlice = createSlice({
         builder.addCase( loginUser.rejected, ( state, action ) =>
             {
                 return {
-                    ...state,
                     loginStatus: "rejected",
                     loginError: action.payload
                 }
             }
         )
+        builder.addCase( connectUser.pending, ( state ) =>
+            {
+                return { connectStatus: "pending"}
+            }
+        )
+        builder.addCase( connectUser.fulfilled, ( state, action ) =>
+            {
+                return (
+                    action.payload ? {
+                        token: action.payload,
+                        connectStatus: "success",
+                        userIsLoggedIn: true
+                    } : state
+                )
+            }
+        )
+        builder.addCase( connectUser.rejected, ( state, action ) =>
+            {
+                return {
+                    connectStatus: "rejected",
+                    connectError: action.payload
+                }
+            }
+        )
     }
+    
 })
 
 export const { setEmail, setPassword } = authSlice.actions

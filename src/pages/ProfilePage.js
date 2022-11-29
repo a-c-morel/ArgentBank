@@ -1,12 +1,19 @@
-import React from 'react'
-import AccountContent from '../components/AccountContent';
-import Footer from '../components/Footer'
-import Navbar from '../components/Navbar';
+import React from 'react' //, { useEffect, useState }
+//import { useSelector } from 'react-redux'
+import AccountContent from '../components/AccountContent'
+//import Navbar from '../components/Navbar'
 
 function ProfilePage() {
+
+  /*const auth = useSelector(state => state.auth)
+  const [token, setToken] = useState(null)
+
+  useEffect(() => {
+    setToken(auth.token)
+  }, [auth.token])*/
+
   return (
     <>
-      <Navbar page="ProfilePage" />
       <main className="main bg-dark">
         <div className="header">
           <h1>Welcome back<br />Tony Jarvis!</h1>
@@ -17,9 +24,8 @@ function ProfilePage() {
         <AccountContent accountType="savings" />
         <AccountContent accountType="creditCard" />
       </main>
-      <Footer />
     </>
-  );
+  )
 }
 
 export default ProfilePage
