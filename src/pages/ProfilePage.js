@@ -1,23 +1,26 @@
-import React from 'react' //, { useEffect, useState }
-//import { useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react' //, { useEffect, useState }
+import { useDispatch, useSelector } from 'react-redux'
 import AccountContent from '../components/AccountContent'
-//import Navbar from '../components/Navbar'
+import { getUserData } from '../features/auth/authSlice'
 
 function ProfilePage() {
 
-  /*const auth = useSelector(state => state.auth)
-  const [token, setToken] = useState(null)
+  const { userData } = useSelector((state) => state.auth)
+  const [user, setUser] = useState({})
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    setToken(auth.token)
-  }, [auth.token])*/
+    dispatch(getUserData()).then((response) => {
+      setUser(response)
+    })
+  }, [userData, dispatch])
 
   return (
     <>
       <main className="main bg-dark">
         <div className="header">
-          <h1>Welcome back<br />Tony Jarvis!</h1>
-          <button className="edit-button">Edit Name</button>
+          <h1>Welcome back<br />{(user) ? `${user.firstName} ${user.lastName}` : "You're not logged in"}</h1>
+          <button className="edit-button" >Edit Name</button>
         </div>
         <h2 className="sr-only">Accounts</h2>
         <AccountContent accountType="checking" />

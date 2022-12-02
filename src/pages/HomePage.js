@@ -1,16 +1,7 @@
-import React from 'react' //, { useEffect, useState }
-//import { useSelector } from 'react-redux';
+import React from 'react'
 import FeatureItem from '../components/FeatureItem'
-//import Navbar from '../components/Navbar';
 
 function HomePage() {
-
-  /*const auth = useSelector(state => state.auth)
-  const [token, setToken] = useState(null)
-
-  useEffect(() => {
-    setToken(auth.token)
-  }, [auth.token])*/
 
   return (
     <>

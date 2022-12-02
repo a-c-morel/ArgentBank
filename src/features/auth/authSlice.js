@@ -1,15 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { url } from "./api"
+import { FetchCalls } from "../../service/service"
+
+const token = localStorage.getItem('token') ? localStorage.getItem('token') : null
 
 const initialState = {
-    token: localStorage.getItem("token"),
+    token,
     email: "",
     password: "",
-    loginStatus: "",
-    loginError: "",
-    connectStatus: "",
-    connectError: "",
-    userIsLoggedIn: false
+    userData: null,
+    loginStatus: null,
+    loginError: null,
+    userIsLoggedIn: false,
+    loading: false
 }
 
 /*
@@ -22,56 +24,20 @@ password456
 
 export const loginUser = createAsyncThunk(
     "auth/loginUser",
-    async (user, { rejectWithValue }) => {
-        try {
-
-            const data = { email: user.email, password: user.password };
-
-            fetch(`${url}/user/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log('Success:', data);
-                localStorage.setItem("token", JSON.stringify(data.body.token));
-                //console.log(localStorage)
-            })
-
-        } catch ( error ) {
-
-            console.log(error)
-            return rejectWithValue(error.response.data)
-
-        }
+    async (data, thunkAPI) => {
+        const myFetchCalls = new FetchCalls()
+        const response = await myFetchCalls.getUserToken(data)
+        return response.data
     }
 )
 
-export const connectUser = createAsyncThunk(
-    "auth/connectUser",
-    async ({ rejectWithValue }) => {
-        try {
-
-            const token = JSON.parse(localStorage.getItem('token'))
-
-            fetch(`${url}/user/profile`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                }
-            )
-            .then((response) => response.json())
-
-        } catch ( error ) {
-
-            console.log(error)
-            return rejectWithValue(error.response.data)
-
-        }
+export const getUserData = createAsyncThunk(
+    "auth/getUserData",
+    async (args, { getState, thunkAPI }) => {
+        const { auth } = getState()
+        const myFetchCalls = new FetchCalls()
+        const response = await myFetchCalls.getUserData(JSON.parse(auth.token))
+        return response.data
     }
 )
 
@@ -79,69 +45,75 @@ const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        /*setEmail: (state, action) => {
+        setEmail: (state, action) => {
             let email = action.payload
             
             return {
-                ...state,
                 email: email
             }
         },
         setPassword: (state, action) => {
             let password = action.payload
              return {
-                ...state,
                 password: password
             }
-        }*/
+        }
     },
     extraReducers: (builder) => {
-        builder.addCase( loginUser.pending, ( state ) =>
+        builder.addCase( loginUser.pending, (state, action) =>
             {
-                return { loginStatus: "pending"}
+                state.loginStatus = "pending"
+                state.userIsLoggedIn = false
+                state.loginError = null
+                state.loading= true
             }
         )
         builder.addCase( loginUser.fulfilled, ( state, action ) =>
             {
-                return (
-                    action.payload ? {
-                        token: action.payload,
-                        loginStatus: "success",
-                        userIsLoggedIn: true
-                    } : state
-                )
+                if(action.payload) {
+                    state.token= action.payload.token
+                    state.loginStatus = "success"
+                    state.userIsLoggedIn = true
+                    state.loginError = null
+                    state.loading = false
+                }else {
+                    return state
+                }
             }
         )
         builder.addCase( loginUser.rejected, ( state, action ) =>
             {
-                return {
-                    loginStatus: "rejected",
-                    loginError: action.payload
-                }
+                state.loginStatus = "rejected"
+                state.loginError = action.payload
+                state.loading = false
             }
         )
-        builder.addCase( connectUser.pending, ( state ) =>
+
+        builder.addCase( getUserData.pending, ( state, action ) =>
             {
-                return { connectStatus: "pending"}
+                state.connectStatus = "pending"
+                state.loading = true
             }
         )
-        builder.addCase( connectUser.fulfilled, ( state, action ) =>
+        builder.addCase( getUserData.fulfilled, ( state, action ) =>
             {
-                return (
-                    action.payload ? {
-                        token: action.payload,
-                        connectStatus: "success",
-                        userIsLoggedIn: true
-                    } : state
-                )
+                
+                if(action.payload) {
+                        state.userData = action.payload
+                        state.connectStatus = "success"
+                        state.userIsLoggedIn = true
+                        state.loading = false
+                    } else {
+                        return state
+                    } 
+                
             }
         )
-        builder.addCase( connectUser.rejected, ( state, action ) =>
+        builder.addCase( getUserData.rejected, ( state, action ) =>
             {
-                return {
-                    connectStatus: "rejected",
-                    connectError: action.payload
-                }
+                state.connectStatus = "rejected"
+                state.connectError = action.payload
+                state.loading = false
             }
         )
     }

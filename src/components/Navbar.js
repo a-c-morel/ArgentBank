@@ -10,7 +10,7 @@ function Navbar() {
 
   useEffect(() => {
     setToken(auth.token)
-    console.log(token)
+    //console.log(token)
   }, [auth.token, token])
   
   return  (

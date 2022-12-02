@@ -1,33 +1,26 @@
-import React, { useState } from 'react' //, useEffect
-import { useDispatch } from 'react-redux' //, useSelector
+import React, { useEffect } from 'react' //, useState
+import { useForm } from 'react-hook-form'
+import { useDispatch, useSelector } from 'react-redux'
 import { loginUser } from '../features/auth/authSlice'
 import { useNavigate } from "react-router-dom"
-//import Navbar from '../components/Navbar'
 
 function LoginPage() {
 
-  //const auth = useSelector(state => state.auth)
-
   const dispatch = useDispatch()
+  const { register, handleSubmit } = useForm()
   const navigate = useNavigate()
-  const [user, setUser] = useState(
-    {
-      email: "",
-      password: "",
-    }
-  )
-  /*const [token, setToken] = useState(null)
+  const { token } = useSelector(state => state.auth)
 
   useEffect(() => {
-    setToken(auth.token)
-  }, [auth.token, navigate, token])*/
+      if((localStorage.getItem('token')) !== null){
+        navigate('/profile')
+      }
+  }, [navigate, dispatch, token])
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(user)
-    dispatch(loginUser(user)).then(() => {
-      navigate('/profile')
-    }) 
+  const submitForm = (data) => {
+    dispatch(loginUser(data)).then(() => {
+      window.location.reload()
+    })
   }
 
   return (
@@ -36,14 +29,15 @@ function LoginPage() {
         <section className="sign-in-content">
           <i className="fa fa-user-circle sign-in-icon"></i>
           <h1>Sign In</h1>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(submitForm)}>
+          {/*error && <Error>{error}</Error>*/}
             <div className="input-wrapper">
-              <label htmlFor="username">Username</label>
-              <input type="text" id="username" onChange={(e) => setUser({ ...user, email: e.target.value })} />
+              <label htmlFor="email">Email</label>
+              <input type="email" id="username" {...register('email')} />
             </div>
             <div className="input-wrapper">
               <label htmlFor="password">Password</label>
-              <input type="password" id="password" onChange={(e) => setUser({ ...user, password: e.target.value })} />
+              <input type="password" id="password" {...register('password')} />
             </div>
             <div className="input-remember">
               <input type="checkbox" id="remember-me" />
