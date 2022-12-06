@@ -5,21 +5,30 @@ import { getUserData } from '../features/auth/authSlice'
 
 function ProfilePage() {
 
-  const { userData } = useSelector((state) => state.auth)
-  const [user, setUser] = useState({})
+  const firstName = useSelector((state) => state.auth.firstName)
+  const lastName = useSelector((state) => state.auth.lastName)
   const dispatch = useDispatch()
+  const [userName, setUserName] = useState({
+    firstName: null,
+    lastName: null
+  })
 
   useEffect(() => {
     dispatch(getUserData()).then((response) => {
-      setUser(response)
+      console.log(response)
+      console.log(firstName, lastName)
+      setUserName({
+        firstName: firstName,
+        lastName: lastName
+      })
     })
-  }, [userData, dispatch])
+  }, [dispatch, firstName, lastName])
 
   return (
     <>
       <main className="main bg-dark">
         <div className="header">
-          <h1>Welcome back<br />{(user) ? `${user.firstName} ${user.lastName}` : "You're not logged in"}</h1>
+          <h1>Welcome back<br />{`${userName.firstName} ${userName.lastName}`}</h1>
           <button className="edit-button" >Edit Name</button>
         </div>
         <h2 className="sr-only">Accounts</h2>

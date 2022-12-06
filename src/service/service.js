@@ -40,8 +40,8 @@ export class FetchCalls {
                     }
                 )
                 const data = await response.json()
-                console.log(data)
-                return data
+                console.log(JSON.stringify(data))
+                return JSON.stringify(data)
     
             } catch ( error ) {
     

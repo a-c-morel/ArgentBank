@@ -7,7 +7,9 @@ const initialState = {
     token,
     email: "",
     password: "",
-    userData: null,
+    //userData: {},
+    firstName: "",
+    lastName: "",
     loginStatus: null,
     loginError: null,
     userIsLoggedIn: false,
@@ -24,20 +26,38 @@ password456
 
 export const loginUser = createAsyncThunk(
     "auth/loginUser",
-    async (data, thunkAPI) => {
-        const myFetchCalls = new FetchCalls()
-        const response = await myFetchCalls.getUserToken(data)
-        return response.data
+    async (data, { rejectWithValue }) => {
+        try {
+            const myFetchCalls = new FetchCalls()
+            const response = await myFetchCalls.getUserToken(data)
+            return JSON.stringify(response)
+        } catch (error) {
+            if (error.response && error.response.data.message) {
+                return rejectWithValue(error.response.body.message)
+            } else {
+                return rejectWithValue(error.message)
+            }
+        }
+        
     }
 )
 
 export const getUserData = createAsyncThunk(
     "auth/getUserData",
-    async (args, { getState, thunkAPI }) => {
-        const { auth } = getState()
-        const myFetchCalls = new FetchCalls()
-        const response = await myFetchCalls.getUserData(JSON.parse(auth.token))
-        return response.data
+    async (arg, { getState, rejectWithValue }) => {
+        try {
+            const { auth } = getState()
+            const myFetchCalls = new FetchCalls()
+            const response = await myFetchCalls.getUserData(JSON.parse(auth.token))
+            return JSON.parse(response)
+        } catch (error) {
+            if (error.response && error.response.data.message) {
+                return rejectWithValue(error.response.body.message)
+            } else {
+                return rejectWithValue(error.message)
+            }
+        }
+        
     }
 )
 
@@ -71,13 +91,14 @@ const authSlice = createSlice({
         builder.addCase( loginUser.fulfilled, ( state, action ) =>
             {
                 if(action.payload) {
-                    state.token= action.payload.token
+                    state.token = action.payload.token
                     state.loginStatus = "success"
                     state.userIsLoggedIn = true
                     state.loginError = null
                     state.loading = false
                 }else {
-                    return state
+                    console.log(state.token)
+                    //return state
                 }
             }
         )
@@ -97,15 +118,15 @@ const authSlice = createSlice({
         )
         builder.addCase( getUserData.fulfilled, ( state, action ) =>
             {
-                
                 if(action.payload) {
-                        state.userData = action.payload
+                        state.firstName = action.payload.body.firstName
+                        state.lastName = action.payload.body.lastName
                         state.connectStatus = "success"
                         state.userIsLoggedIn = true
                         state.loading = false
-                    } else {
-                        return state
-                    } 
+                } else {
+                    return state
+                }
                 
             }
         )

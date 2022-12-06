@@ -18,7 +18,7 @@ function LoginPage() {
   }, [navigate, dispatch, token])
 
   const submitForm = (data) => {
-    dispatch(loginUser(data)).then(() => {
+    dispatch(loginUser(data)).then((response) => {
       window.location.reload()
     })
   }
