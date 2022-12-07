@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react' //, useState
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser } from '../features/auth/authSlice'
@@ -19,6 +19,7 @@ function LoginPage() {
 
   const submitForm = (data) => {
     dispatch(loginUser(data)).then((response) => {
+      //to rerender with the data
       window.location.reload()
     })
   }
@@ -30,7 +31,6 @@ function LoginPage() {
           <i className="fa fa-user-circle sign-in-icon"></i>
           <h1>Sign In</h1>
           <form onSubmit={handleSubmit(submitForm)}>
-          {/*error && <Error>{error}</Error>*/}
             <div className="input-wrapper">
               <label htmlFor="email">Email</label>
               <input type="email" id="username" {...register('email')} />

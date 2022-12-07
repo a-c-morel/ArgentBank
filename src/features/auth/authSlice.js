@@ -7,7 +7,6 @@ const initialState = {
     token,
     email: "",
     password: "",
-    //userData: {},
     firstName: "",
     lastName: "",
     loginStatus: null,
@@ -65,18 +64,13 @@ const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        setEmail: (state, action) => {
-            let email = action.payload
-            
-            return {
-                email: email
-            }
-        },
-        setPassword: (state, action) => {
-            let password = action.payload
-             return {
-                password: password
-            }
+        logout: (state) => {
+            localStorage.removeItem('token')
+            state.loading = false
+            state.firstName = null
+            state.lastName = null
+            state.token = null
+            state.loginError = null
         }
     },
     extraReducers: (builder) => {
@@ -97,8 +91,7 @@ const authSlice = createSlice({
                     state.loginError = null
                     state.loading = false
                 }else {
-                    console.log(state.token)
-                    //return state
+                    console.log("Payload is empty")
                 }
             }
         )
@@ -125,7 +118,7 @@ const authSlice = createSlice({
                         state.userIsLoggedIn = true
                         state.loading = false
                 } else {
-                    return state
+                    console.log("Payload is empty")
                 }
                 
             }
@@ -141,5 +134,5 @@ const authSlice = createSlice({
     
 })
 
-export const { setEmail, setPassword } = authSlice.actions
+export const { logout } = authSlice.actions
 export default authSlice.reducer

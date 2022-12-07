@@ -1,17 +1,24 @@
-import React, { useState, useEffect } from 'react' 
+import React, { useEffect, useState } from 'react' 
 import {Link} from "react-router-dom"
 import argentBankLogo from "../assets/argentBankLogo.png"
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUserData } from '../features/auth/authSlice'
 
 function Navbar() {
 
-  const auth = useSelector(state => state.auth)
-  const [token, setToken] = useState(null)
+  const { firstName, token } = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
+  const [userName, setUserName] = useState("")
 
   useEffect(() => {
-    setToken(auth.token)
-    //console.log(token)
-  }, [auth.token, token])
+    if(token !== null) {
+      dispatch(getUserData()).then((response) => {
+        console.log(response)
+        console.log("Navbar:", firstName)
+        setUserName(firstName)
+      })
+    }
+  }, [token, dispatch, firstName])
   
   return  (
     <nav className="main-nav">
@@ -35,7 +42,7 @@ function Navbar() {
             <div>
               <Link to="/user" className="main-nav-item">
                 <i className="fa fa-user-circle"></i>
-                Tony
+                {`${userName}`}
               </Link>
               <Link to="/" className="main-nav-item">
                 <i className="fa fa-sign-out"></i>

@@ -9,8 +9,8 @@ function ProfilePage() {
   const lastName = useSelector((state) => state.auth.lastName)
   const dispatch = useDispatch()
   const [userName, setUserName] = useState({
-    firstName: null,
-    lastName: null
+    firstName: "",
+    lastName: ""
   })
 
   useEffect(() => {
