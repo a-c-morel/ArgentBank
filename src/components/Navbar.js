@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {Link} from "react-router-dom"
 import argentBankLogo from "../assets/argentBankLogo.png"
 import { useDispatch, useSelector } from 'react-redux'
-import { getUserData } from '../features/auth/authSlice'
+import { getUserData, signOut } from '../features/auth/authSlice'
 
 function Navbar() {
 
@@ -44,7 +44,7 @@ function Navbar() {
                 <i className="fa fa-user-circle"></i>
                 {`${userName}`}
               </Link>
-              <Link to="/" className="main-nav-item">
+              <Link to="/" className="main-nav-item" onClick={() => dispatch(signOut())}>
                 <i className="fa fa-sign-out"></i>
                 Sign Out
               </Link>
