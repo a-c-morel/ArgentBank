@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { loginUser } from '../features/auth/authSlice'
 import { useNavigate } from "react-router-dom"
 
@@ -9,13 +9,12 @@ function LoginPage() {
   const dispatch = useDispatch()
   const { register, handleSubmit } = useForm()
   const navigate = useNavigate()
-  const { token } = useSelector(state => state.auth)
 
   useEffect(() => {
       if((localStorage.getItem('token')) !== null){
         navigate('/profile')
       }
-  }, [navigate, dispatch, token])
+  }, [navigate, dispatch])
 
   const submitForm = (data) => {
     dispatch(loginUser(data)).then((response) => {

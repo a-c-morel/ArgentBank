@@ -19,11 +19,8 @@ export class FetchCalls {
             localStorage.setItem("token", JSON.stringify(data.body.token))
             console.log(data)
             return data
-    
         } catch ( error ) {
-    
             console.log(error)
-    
         }
     }
 
@@ -41,14 +38,35 @@ export class FetchCalls {
                 )
                 const data = await response.json()
                 return JSON.stringify(data)
-    
             } catch ( error ) {
-    
                 console.log(error)
-    
+            }
+        }
+
+        async updateUserName(token, myFirstName, myLastName) {
+            const myBody = {
+                firstName: myFirstName,
+                lastName: myLastName
+            }
+            try {
+                const response = await fetch(
+                    `${url}/user/profile`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Content-type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(myBody)
+                        
+                    }
+                )
+                const data = await response.json()
+                return JSON.stringify(data)
+            } catch ( error ) {
+                console.log(error)
             }
         }
 
 
 }
-

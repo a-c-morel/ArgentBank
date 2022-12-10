@@ -12,13 +12,14 @@ const initialState = {
     loginStatus: null,
     loginError: null,
     userIsLoggedIn: false,
+    connectStatus: null,
+    connectError: null,
     loading: false
 }
 
 /*
 tony@stark.com
 password123
-
 steve@rogers.com,
 password456
 */
@@ -56,7 +57,6 @@ export const getUserData = createAsyncThunk(
                 return rejectWithValue(error.message)
             }
         }
-        
     }
 )
 
