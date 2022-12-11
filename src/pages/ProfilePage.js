@@ -16,23 +16,37 @@ function ProfilePage() {
     firstName: "",
     lastName: ""
   })
-  //const [newFirstName, setNewFirstName] = useState("")
-  //const [newLastName, setNewLastName] = useState("")
   const [editInputsDisplayed, setEditInputsDisplayed] = useState(false)
 
   const showEditInputs = () => {
     setEditInputsDisplayed(true)
   }
 
-  /*const handleSubmit = (e) => {
-    e.preventDefault()
-    dispatch(updateUserName(newFirstName, newLastName))
-  }*/
+  const getUserName = () => {
+    dispatch(getUserData()).then((response) => {
+      console.log(response)
+      console.log(firstName, lastName)
+      setUserName({
+        firstName: firstName,
+        lastName: lastName
+      })
+    })
+  }
 
   const submitForm = (data) => {
     console.log(data)
     dispatch(updateUserName(data)).then((response) => {
       console.log(response)
+      setEditInputsDisplayed(false)
+      getUserName()
+      /*dispatch(getUserData()).then((response) => {
+        console.log(response)
+        console.log(firstName, lastName)
+        setUserName({
+          firstName: firstName,
+          lastName: lastName
+        })
+      })*/
     })
   }
 
