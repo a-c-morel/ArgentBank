@@ -1,27 +1,27 @@
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
-import { loginUser } from '../features/auth/authSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { authenticateUser } from '../features/auth/authSlice'
 import { useNavigate } from "react-router-dom"
 
 function LoginPage() {
 
   const dispatch = useDispatch()
-  const { register, handleSubmit } = useForm()
   const navigate = useNavigate()
 
-  useEffect(() => {
-      if((localStorage.getItem('token')) !== null){
-        navigate('/profile')
-      }
-  }, [navigate, dispatch])
-
+  const { register, handleSubmit } = useForm()
+  const token = useSelector(state => state.auth.token)
+  
   const submitForm = (data) => {
-    dispatch(loginUser(data)).then((response) => {
-      //to rerender with the data
-      window.location.reload()
-    })
+    dispatch(authenticateUser(data))
+    console.log(token)
   }
+
+  useEffect(() => {
+    if(token){
+      navigate('/profile')
+    }
+}, [navigate, token])
 
   return (
     <>

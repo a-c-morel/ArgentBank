@@ -1,79 +1,54 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AccountContent from '../components/AccountContent'
-import { getUserData } from '../features/auth/authSlice'
-//import { updateUserName } from '../features/user/userSlice'
+//import { authenticateUser } from '../features/auth/authSlice'
 import { useForm } from 'react-hook-form'
 import { updateUserName } from '../features/user/userSlice'
 
 function ProfilePage() {
 
-  const firstName = useSelector((state) => state.auth.firstName)
-  const lastName = useSelector((state) => state.auth.lastName)
+  const { firstName } = useSelector((state) => state.auth)
+  const { lastName } = useSelector((state) => state.auth)
+  
   const dispatch = useDispatch()
   const { register, handleSubmit } = useForm()
-  const [userName, setUserName] = useState({
-    firstName: "",
-    lastName: ""
-  })
   const [editInputsDisplayed, setEditInputsDisplayed] = useState(false)
 
   const showEditInputs = () => {
     setEditInputsDisplayed(true)
   }
 
-  const getUserName = () => {
-    dispatch(getUserData()).then((response) => {
+
+  /*Idée = utiliser la fonction du service "getUserData(token)", comme ça ça résout le message d'erreur qui dit que ça demande un email ? */
+
+  /*const getUserName = () => {
+    dispatch(authenticateUser()).then((response) => {
       console.log(response)
-      console.log(firstName, lastName)
-      setUserName({
-        firstName: firstName,
-        lastName: lastName
-      })
     })
-  }
+  }*/
 
   const submitForm = (data) => {
     console.log(data)
     dispatch(updateUserName(data)).then((response) => {
       console.log(response)
       setEditInputsDisplayed(false)
-      getUserName()
-      /*dispatch(getUserData()).then((response) => {
-        console.log(response)
-        console.log(firstName, lastName)
-        setUserName({
-          firstName: firstName,
-          lastName: lastName
-        })
-      })*/
+      //getUserName()
     })
   }
-
-  useEffect(() => {
-    dispatch(getUserData()).then((response) => {
-      console.log(response)
-      console.log(firstName, lastName)
-      setUserName({
-        firstName: firstName,
-        lastName: lastName
-      })
-    })
-  }, [dispatch, firstName, lastName])
 
   return (
     <>
       <main className="main bg-dark">
         <div className="header">
-          <h1>Welcome back<br />{`${userName.firstName} ${userName.lastName}`}</h1>
+          <h1>Welcome back<br />{`${firstName} ${lastName}`}</h1>
           { editInputsDisplayed ?
             (
               <form onSubmit={handleSubmit(submitForm)}>
                 <div className="">
-                  <input type="text" id="firstname" placeholder={userName.firstName} {...register('firstname')} />
+                  <input type="text" id="firstname" placeholder={firstName} {...register('firstname')} />
                 </div>
                 <div className="">
-                  <input type="text" id="lastname" placeholder={userName.lastName} {...register('lastname')} />
+                  <input type="text" id="lastname" placeholder={lastName} {...register('lastname')} />
                 </div>
                 <button className="edit-name-button" type='submit'>Save</button>
                 <button className="edit-name-button" onClick={ () => setEditInputsDisplayed(false) } >Cancel</button>

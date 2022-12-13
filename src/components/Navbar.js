@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {Link} from "react-router-dom"
 import argentBankLogo from "../assets/argentBankLogo.png"
 import { useDispatch, useSelector } from 'react-redux'
-import { getUserData, signOut } from '../features/auth/authSlice'
+import { authenticateUser, signOut } from '../features/auth/authSlice'
 
 function Navbar() {
 
@@ -12,7 +12,7 @@ function Navbar() {
 
   useEffect(() => {
     if(token !== null) {
-      dispatch(getUserData()).then((response) => {
+      dispatch(authenticateUser()).then((response) => {
         console.log(response)
         console.log("Navbar:", firstName)
         setUserName(firstName)

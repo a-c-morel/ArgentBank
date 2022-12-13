@@ -2,7 +2,7 @@ import { url } from "./api"
 
 export class FetchCalls {
 
-    async getUserToken(data) {
+    async userAuthentication(data) {
         const userLoginInfo = { email: data.email, password: data.password }
         try {
             const response = await fetch(
@@ -17,8 +17,13 @@ export class FetchCalls {
             )
             const data = await response.json()
             localStorage.setItem("token", JSON.stringify(data.body.token))
-            console.log(data)
-            return data
+            const userData = await this.getUserData(data.body.token)
+            const myPayload = {
+                token: data.body.token,
+                firstName: userData.firstName,
+                lastName: userData.lastName
+            }
+            return myPayload
         } catch ( error ) {
             console.log(error)
         }
@@ -37,7 +42,8 @@ export class FetchCalls {
                     }
                 )
                 const data = await response.json()
-                return JSON.stringify(data)
+                console.log(data.body)
+                return data.body
             } catch ( error ) {
                 console.log(error)
             }

@@ -6,7 +6,7 @@ import { store } from "./app/store"
 import App from './App'
 import './index.css'
 import Footer from './components/Footer'
-import Navbar from './components/Navbar';
+import Navbar from './components/Navbar'
 
 const container = document.getElementById('root')
 const root = createRoot(container)

@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { FetchCalls } from "../../service/service"
 
-const token = localStorage.getItem('token') ? localStorage.getItem('token') : null
+//const token = localStorage.getItem('token') ? localStorage.getItem('token') : null
 
 const initialState = {
-    token,
+    token: localStorage.getItem('token'),
     email: "",
     password: "",
     firstName: "",
@@ -24,13 +24,14 @@ steve@rogers.com,
 password456
 */
 
-export const loginUser = createAsyncThunk(
-    "auth/loginUser",
+export const authenticateUser = createAsyncThunk(
+    "auth/authenticateUser",
     async (data, { rejectWithValue }) => {
         try {
             const myFetchCalls = new FetchCalls()
-            const response = await myFetchCalls.getUserToken(data)
-            return JSON.stringify(response)
+            const response = await myFetchCalls.userAuthentication(data)
+            console.log(response)
+            return response
         } catch (error) {
             if (error.response && error.response.data.message) {
                 return rejectWithValue(error.response.body.message)
@@ -39,24 +40,6 @@ export const loginUser = createAsyncThunk(
             }
         }
         
-    }
-)
-
-export const getUserData = createAsyncThunk(
-    "auth/getUserData",
-    async (arg, { getState, rejectWithValue }) => {
-        try {
-            const { auth } = getState()
-            const myFetchCalls = new FetchCalls()
-            const response = await myFetchCalls.getUserData(JSON.parse(auth.token))
-            return JSON.parse(response)
-        } catch (error) {
-            if (error.response && error.response.data.message) {
-                return rejectWithValue(error.response.body.message)
-            } else {
-                return rejectWithValue(error.message)
-            }
-        }
     }
 )
 
@@ -74,56 +57,29 @@ const authSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase( loginUser.pending, (state, action) =>
-            {
-                state.loginStatus = "pending"
-                state.userIsLoggedIn = false
-                state.loginError = null
-                state.loading= true
-            }
-        )
-        builder.addCase( loginUser.fulfilled, ( state, action ) =>
-            {
-                if(action.payload) {
-                    state.token = action.payload.token
-                    state.loginStatus = "success"
-                    state.userIsLoggedIn = true
-                    state.loginError = null
-                    state.loading = false
-                }else {
-                    console.log("Payload is empty")
-                }
-            }
-        )
-        builder.addCase( loginUser.rejected, ( state, action ) =>
-            {
-                state.loginStatus = "rejected"
-                state.loginError = action.payload
-                state.loading = false
-            }
-        )
-
-        builder.addCase( getUserData.pending, ( state, action ) =>
+        builder.addCase( authenticateUser.pending, (state, action) =>
             {
                 state.connectStatus = "pending"
+                state.connectError = false
                 state.loading = true
             }
         )
-        builder.addCase( getUserData.fulfilled, ( state, action ) =>
+        builder.addCase( authenticateUser.fulfilled, ( state, action ) =>
             {
+                console.log(action.payload)
                 if(action.payload) {
-                        state.firstName = action.payload.body.firstName
-                        state.lastName = action.payload.body.lastName
-                        state.connectStatus = "success"
-                        state.userIsLoggedIn = true
-                        state.loading = false
+                    state.token = action.payload.token
+                    state.firstName = action.payload.firstName
+                    state.lastName = action.payload.lastName
+                    state.connectStatus = "success"
+                    state.userIsLoggedIn = true
+                    state.loading = false
                 } else {
                     console.log("Payload is empty")
                 }
-                
             }
         )
-        builder.addCase( getUserData.rejected, ( state, action ) =>
+        builder.addCase( authenticateUser.rejected, ( state, action ) =>
             {
                 state.connectStatus = "rejected"
                 state.connectError = action.payload
@@ -131,7 +87,6 @@ const authSlice = createSlice({
             }
         )
     }
-    
 })
 
 export const { signOut } = authSlice.actions
