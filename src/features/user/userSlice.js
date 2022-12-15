@@ -1,10 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { FetchCalls } from "../../service/service"
 
-const token = localStorage.getItem('token') ? localStorage.getItem('token') : null
+//const token = localStorage.getItem('token') ? localStorage.getItem('token') : null
 
 const initialState = {
-    token,
+    token: "",
+    firstName: "",
+    lastName: "",
     id: "",
     email: "",
     userIsLoggedIn: false,
@@ -17,7 +19,7 @@ export const updateUserName = createAsyncThunk(
         try {
             const { auth } = getState()
             const myFetchCalls = new FetchCalls()
-            const response = await myFetchCalls.updateUserName(JSON.parse(auth.token), data.firstname, data.lastname)
+            const response = await myFetchCalls.updateUserName(auth.token, data.firstname, data.lastname) //JSON.parse(auth.token) ?
             console.log(JSON.parse(response))
             return JSON.parse(response)
         } catch (error) {

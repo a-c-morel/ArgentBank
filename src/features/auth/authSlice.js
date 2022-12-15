@@ -43,6 +43,26 @@ export const authenticateUser = createAsyncThunk(
     }
 )
 
+export const getUserNewName = createAsyncThunk(
+    "user/getUserNewName",
+    async (token, { rejectWithValue }) => {
+        try {
+            //const { auth } = getState()
+            const myFetchCalls = new FetchCalls()
+            const response = await myFetchCalls.getUserData(token)
+            console.log(response)
+            return response
+        } catch (error) {
+            if (error.response && error.response.data.message) {
+                return rejectWithValue(error.response.body.message)
+            } else {
+                return rejectWithValue(error.message)
+            }
+        }
+        
+    }
+)
+
 const authSlice = createSlice({
     name: "auth",
     initialState,
@@ -83,6 +103,30 @@ const authSlice = createSlice({
             {
                 state.connectStatus = "rejected"
                 state.connectError = action.payload
+                state.loading = false
+            }
+        )
+
+        builder.addCase( getUserNewName.pending, ( state, action ) =>
+            {
+                state.loading = true
+            }
+        )
+        builder.addCase( getUserNewName.fulfilled, ( state, action ) =>
+            {
+                if(action.payload) {
+                    console.log(action.payload)
+                        state.firstName = action.payload.firstName
+                        state.lastName = action.payload.lastName
+                        state.loading = false
+                } else {
+                    console.log("Payload is empty")
+                }
+                
+            }
+        )
+        builder.addCase( getUserNewName.rejected, ( state, action ) =>
+            {
                 state.loading = false
             }
         )

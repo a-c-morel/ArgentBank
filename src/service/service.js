@@ -16,7 +16,7 @@ export class FetchCalls {
                 }
             )
             const data = await response.json()
-            localStorage.setItem("token", JSON.stringify(data.body.token))
+            localStorage.setItem("token", data.body.token)
             const userData = await this.getUserData(data.body.token)
             const myPayload = {
                 token: data.body.token,
