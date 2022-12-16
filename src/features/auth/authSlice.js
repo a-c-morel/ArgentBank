@@ -1,14 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { FetchCalls } from "../../service/service"
 
-//const token = localStorage.getItem('token') ? localStorage.getItem('token') : null
-
 const initialState = {
     token: localStorage.getItem('token'),
     email: "",
     password: "",
-    firstName: "",
-    lastName: "",
+    firstName: localStorage.getItem('firstName'),
+    lastName: localStorage.getItem('lastName'),
     loginStatus: null,
     loginError: null,
     userIsLoggedIn: false,

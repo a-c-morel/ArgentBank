@@ -23,6 +23,8 @@ export class FetchCalls {
                 firstName: userData.firstName,
                 lastName: userData.lastName
             }
+            localStorage.setItem("firstName", userData.firstName)
+            localStorage.setItem("lastName", userData.lastName)
             return myPayload
         } catch ( error ) {
             console.log(error)
@@ -43,6 +45,8 @@ export class FetchCalls {
                 )
                 const data = await response.json()
                 console.log(data.body)
+                localStorage.setItem("firstName", data.body.firstName)
+                localStorage.setItem("lastName", data.body.lastName)
                 return data.body
             } catch ( error ) {
                 console.log(error)

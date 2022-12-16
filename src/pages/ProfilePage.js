@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AccountContent from '../components/AccountContent'
-//import { authenticateUser } from '../features/auth/authSlice'
 import { useForm } from 'react-hook-form'
 import { updateUserName } from '../features/user/userSlice'
 import { getUserNewName } from '../features/auth/authSlice'
@@ -15,7 +14,6 @@ function ProfilePage() {
   const dispatch = useDispatch()
   const { register, handleSubmit } = useForm()
   const [editInputsDisplayed, setEditInputsDisplayed] = useState(false)
-
   const [userName, setUserName] = useState({firstName: firstName, lastName: lastName})
 
   const showEditInputs = () => {
@@ -23,13 +21,9 @@ function ProfilePage() {
   }
 
   const submitForm = (data) => {
-    console.log(data) //{firstname: 'Jean-Jacques', lastname: 'Goldman'}
-    dispatch(updateUserName(data)).then((response) => {
-      console.log(response)
+    dispatch(updateUserName(data)).then(() => {
       setEditInputsDisplayed(false)
-      dispatch(getUserNewName(token)).then((response) => {
-        console.log(response)
-      })
+      dispatch(getUserNewName(token))
     })
   }
 
