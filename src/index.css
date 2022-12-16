@@ -334,6 +334,74 @@ html {
     background-color: #00bc77;
     color: #fff;
   }
+
+  .update-name__form {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    gap: 1rem
+  }
+
+  .update-name__col-left {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: end;
+        -ms-flex-align: end;
+            align-items: flex-end;
+    gap: 1rem
+  }
+
+  .update-name__col-right {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: start;
+    gap: 1rem
+  }
+
+  .update-name__input {
+    height: 1.75rem;
+    padding-left: .5rem;
+  }
+  .update-name__input::-webkit-input-placeholder {
+    color: gray
+  }
+  .update-name__input::-moz-placeholder {
+    color: gray
+  }
+  .update-name__input:-ms-input-placeholder {
+    color: gray
+  }
+  .update-name__input::-ms-input-placeholder {
+    color: gray
+  }
+  .update-name__input::placeholder {
+    color: rgb(160, 159, 159);
+  }
+
+  .edit-name-button {
+    color: #00bc77;
+    background-color: #fff;
+    border-width: 1px;
+    border-color: #00bc77;
+    width: 6rem;
+    height: 1.5rem;
+    border-radius: 2px;
+  }
   
   @media (min-width: 720px) {
     .account {

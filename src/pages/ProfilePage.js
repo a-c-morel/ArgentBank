@@ -39,22 +39,28 @@ function ProfilePage() {
     <>
       <main className="main bg-dark">
         <div className="header">
-          <h1>Welcome back<br />{`${userName.firstName} ${userName.lastName}`}</h1>
           { editInputsDisplayed ?
             (
-              <form onSubmit={handleSubmit(submitForm)}>
-                <div className="">
-                  <input type="text" id="firstname" placeholder={userName.firstName} {...register('firstname')} />
+              <>
+              <h1>Welcome back</h1>
+              <form onSubmit={handleSubmit(submitForm)} className="update-name__form">
+                <div className="update-name__col-left">
+                  <input type="text" id="firstname" className="update-name__input" placeholder={userName.firstName} {...register('firstname')} />
+                  <button className="edit-name-button" type='submit'>Save</button>
                 </div>
-                <div className="">
-                  <input type="text" id="lastname" placeholder={userName.lastName} {...register('lastname')} />
+                <div className='update-name__col-right'>
+                  <input type="text" id="lastname" className="update-name__input" placeholder={userName.lastName} {...register('lastname')} />
+                  <button className="edit-name-button" onClick={ () => setEditInputsDisplayed(false) } >Cancel</button>
                 </div>
-                <button className="edit-name-button" type='submit'>Save</button>
-                <button className="edit-name-button" onClick={ () => setEditInputsDisplayed(false) } >Cancel</button>
+                
               </form>
+              </>
             ) :
             (
+              <>
+              <h1>Welcome back<br />{`${userName.firstName} ${userName.lastName}`}</h1>
               <button className="edit-button" onClick={showEditInputs}>Edit Name</button>
+              </>
             )
           }
         </div>
