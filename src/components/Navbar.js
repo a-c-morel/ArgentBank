@@ -2,7 +2,8 @@ import React from 'react'
 import {Link} from "react-router-dom"
 import argentBankLogo from "../assets/argentBankLogo.png"
 import { useDispatch, useSelector } from 'react-redux'
-import { signOut } from '../features/auth/authSlice' 
+import { signOut } from '../features/auth/authSlice'
+import { FaUserCircle, FaSignOutAlt } from 'react-icons/fa'
 
 function Navbar() {
 
@@ -23,18 +24,18 @@ function Navbar() {
           (token === null) ? (
             <div>
               <Link to="/login" className="main-nav-item">
-              <i className="fa fa-user-circle"></i>
+              <FaUserCircle size={18} />
               Sign In
               </Link>
             </div>
           ) : (
-            <div>
+            <div className="signout-container">
               <Link to="/user" className="main-nav-item">
-                <i className="fa fa-user-circle"></i>
+                <FaUserCircle size={18} />
                 {`${firstName}`}
               </Link>
               <Link to="/" className="main-nav-item" onClick={() => dispatch(signOut())}>
-                <i className="fa fa-sign-out"></i>
+                <FaSignOutAlt />
                 Sign Out
               </Link>
             </div>

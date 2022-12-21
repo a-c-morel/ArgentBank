@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { authenticateUser } from '../features/auth/authSlice'
 import { useNavigate } from "react-router-dom"
+import { FaUserCircle } from 'react-icons/fa'
 
 function LoginPage() {
 
@@ -28,7 +29,7 @@ function LoginPage() {
     <>
       <main className="main bg-dark">
         <section className="sign-in-content">
-          <i className="fa fa-user-circle sign-in-icon"></i>
+        <FaUserCircle size={18} />
           <h1>Sign In</h1>
           <form onSubmit={handleSubmit(submitForm)}>
             <div className="input-wrapper">
