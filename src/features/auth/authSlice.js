@@ -67,6 +67,35 @@ async function getUserData(token) {
     }
 }
 
+export const updateUserName = createAsyncThunk(
+    "auth/updateUserName",
+    async (myData, { getState }) => {
+        const myBody = {
+            firstName: myData.firstname,
+            lastName: myData.lastname
+        }
+        const { auth } = getState()
+        try {
+            
+            const response = await fetch(
+                `${url}/user/profile`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Authorization': `Bearer ${auth.token}`
+                    },
+                    body: JSON.stringify(myBody)
+                }
+            )
+            const data = await response.json()
+            return data
+        } catch (error) {
+            console.log(error)
+        }
+    }
+)
+
 export const getUserNewName = createAsyncThunk(
     "user/getUserNewName",
     async (_, { getState }) => {

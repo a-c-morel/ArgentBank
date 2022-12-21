@@ -16,7 +16,6 @@ function LoginPage() {
   
   const submitForm = (data) => {
     dispatch(authenticateUser(data))
-    console.log(token)
   }
 
   useEffect(() => {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AccountContent from '../components/AccountContent'
 import { useForm } from 'react-hook-form'
-import { updateUserName } from '../features/user/userSlice'
+import { updateUserName } from '../features/auth/authSlice'
 import { getUserNewName } from '../features/auth/authSlice'
 
 function ProfilePage() {
