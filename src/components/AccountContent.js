@@ -4,6 +4,7 @@ function AccountContent({ accountType }) {
 
     let accountTitle
     let accountAmount
+    let accountAmountDescription = "Available Balance"
     if(accountType === "checking") {
         accountTitle = "Argent Bank Checking (x8349)"
         accountAmount = "$2,082.79"
@@ -13,6 +14,7 @@ function AccountContent({ accountType }) {
     } else {
         accountTitle = "Argent Bank Credit Card (x8349)"
         accountAmount = "$184.30"
+        accountAmountDescription = "Current Balance"
     }
 
     return (
@@ -20,7 +22,7 @@ function AccountContent({ accountType }) {
             <div className="account-content-wrapper">
               <h3 className="account-title">{accountTitle}</h3>
               <p className="account-amount">{accountAmount}</p>
-              <p className="account-amount-description">Available Balance</p>
+              <p className="account-amount-description">{accountAmountDescription}</p>
             </div>
             <div className="account-content-wrapper cta">
                 <button className="transaction-button">View transactions</button>

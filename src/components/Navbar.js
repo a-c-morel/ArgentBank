@@ -1,8 +1,8 @@
 import React from 'react'
 import {Link} from "react-router-dom"
-import argentBankLogo from "../assets/argentBankLogo.png"
 import { useDispatch, useSelector } from 'react-redux'
 import { signOut } from '../features/auth/authSlice'
+import argentBankLogo from "../assets/argentBankLogo.png"
 import { FaUserCircle, FaSignOutAlt } from 'react-icons/fa'
 
 function Navbar() {

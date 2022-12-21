@@ -7,18 +7,8 @@ const initialState = {
     password: "",
     firstName: localStorage.getItem('firstName'),
     lastName: localStorage.getItem('lastName'),
-    loginStatus: null,
-    loginError: null,
-    userIsLoggedIn: false,
-    loading: false
+    loginError: null
 }
-
-/*
-tony@stark.com
-password123
-steve@rogers.com,
-password456
-*/
 
 export const authenticateUser = createAsyncThunk(
     "auth/authenticateUser",
@@ -36,10 +26,11 @@ export const authenticateUser = createAsyncThunk(
         )
         const data = await response.json()
         if(data.status === 200) {
-            localStorage.setItem("token", data.body.token)
-            const userData = await getUserData(data.body.token)
+            const token = data.body.token
+            localStorage.setItem("token", token)
+            const userData = await getUserData(token)
             const myPayload = {
-                token: data.body.token,
+                token: token,
                 firstName: userData.firstName,
                 lastName: userData.lastName
             }
@@ -67,10 +58,10 @@ async function getUserData(token) {
             }
         )
         const data = await response.json()
-        console.log(data.body)
-        localStorage.setItem("firstName", data.body.firstName)
-        localStorage.setItem("lastName", data.body.lastName)
-        return data.body
+        const userInfo = data.body
+        localStorage.setItem("firstName", userInfo.firstName)
+        localStorage.setItem("lastName", userInfo.lastName)
+        return userInfo
     } catch ( error ) {
         console.log(error)
     }
@@ -78,7 +69,7 @@ async function getUserData(token) {
 
 export const getUserNewName = createAsyncThunk(
     "user/getUserNewName",
-    async (_, { getState, rejectWithValue }) => {
+    async (_, { getState }) => {
         const { auth } = getState()
         const token = auth.token
         try {
@@ -93,10 +84,10 @@ export const getUserNewName = createAsyncThunk(
                 }
             )
             const data = await response.json()
-            console.log(data.body)
-            localStorage.setItem("firstName", data.body.firstName)
-            localStorage.setItem("lastName", data.body.lastName)
-            return data.body
+            const userInfo = data.body
+            localStorage.setItem("firstName", userInfo.firstName)
+            localStorage.setItem("lastName", userInfo.lastName)
+            return userInfo
         } catch (error) {
             console.log(error)
         }
@@ -109,8 +100,8 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         signOut: (state) => {
-            localStorage.removeItem('token')
-            state.loading = false
+            let keysToRemove = ["token", "firstName", "lastName"]
+            keysToRemove.forEach(key => localStorage.removeItem(key))
             state.firstName = null
             state.lastName = null
             state.token = null
@@ -120,52 +111,26 @@ const authSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase( authenticateUser.pending, (state, action) =>
             {
-                state.loginStatus = "pending"
                 state.loginError = null
-                state.loading = true
             }
         )
         builder.addCase( authenticateUser.fulfilled, ( state, action ) =>
             {
-                console.log("fullfiled", action.payload)
                 state.token = action.payload.token
                 state.firstName = action.payload.firstName
                 state.lastName = action.payload.lastName
-                state.loginStatus = "success"
-                state.userIsLoggedIn = true
-                state.loading = false
             }
         )
         builder.addCase( authenticateUser.rejected, ( state, action ) =>
             {
-                console.log(action.payload)
-                state.loginStatus = "rejected"
                 state.loginError = action.payload.message
-                state.loading = false
             }
         )
 
-        builder.addCase( getUserNewName.pending, ( state, action ) =>
-            {
-                state.loading = true
-            }
-        )
         builder.addCase( getUserNewName.fulfilled, ( state, action ) =>
             {
-                if(action.payload) {
-                    console.log(action.payload)
-                        state.firstName = action.payload.firstName
-                        state.lastName = action.payload.lastName
-                        state.loading = false
-                } else {
-                    console.log("Payload is empty")
-                }
-                
-            }
-        )
-        builder.addCase( getUserNewName.rejected, ( state, action ) =>
-            {
-                state.loading = false
+                state.firstName = action.payload.firstName
+                state.lastName = action.payload.lastName 
             }
         )
     }
