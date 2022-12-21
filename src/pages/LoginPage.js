@@ -10,7 +10,8 @@ function LoginPage() {
   const navigate = useNavigate()
 
   const { register, handleSubmit } = useForm()
-  const token = useSelector(state => state.auth.token)
+  const { token } = useSelector((state) => state.auth)
+  const { loginError } = useSelector((state) => state.auth)
   
   const submitForm = (data) => {
     dispatch(authenticateUser(data))
@@ -21,7 +22,7 @@ function LoginPage() {
     if(token){
       navigate('/profile')
     }
-}, [navigate, token])
+}, [navigate, token, ])
 
   return (
     <>
@@ -43,6 +44,7 @@ function LoginPage() {
               <label htmlFor="remember-me">Remember me</label>
             </div>
             <button className="sign-in-button" type='submit'>Sign In</button>
+            { (loginError) && (<div className='login-error'>{loginError}</div>) }
           </form>
         </section>
       </main>

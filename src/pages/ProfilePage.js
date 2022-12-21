@@ -14,7 +14,13 @@ function ProfilePage() {
   const dispatch = useDispatch()
   const { register, handleSubmit } = useForm()
   const [editInputsDisplayed, setEditInputsDisplayed] = useState(false)
-  const [userName, setUserName] = useState({firstName: firstName, lastName: lastName})
+  const [userName, setUserName] = useState(() => {
+    if(token){
+      return {firstName: firstName, lastName: lastName}
+    } else {
+      return {firstName: null, lastName: null}
+    }
+  })
 
   const showEditInputs = () => {
     setEditInputsDisplayed(true)
@@ -28,11 +34,14 @@ function ProfilePage() {
   }
 
   useEffect(() => {
-    setUserName({
-      firstName: firstName,
-      lastName: lastName
+    setUserName(() => {
+      if (token) {
+        return {firstName: firstName, lastName: lastName}
+      } else {
+        return {firstName: null, lastName: null}
+      }
     })
-  }, [firstName, lastName])
+  }, [firstName, lastName, token])
   
 
   return (

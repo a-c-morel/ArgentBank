@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { FetchCalls } from "../../service/service"
+import { url } from "../../service/api"
 
 const initialState = {
     id: "",
@@ -10,19 +10,30 @@ const initialState = {
 
 export const updateUserName = createAsyncThunk(
     "user/updateUserName",
-    async (data, { getState, rejectWithValue }) => {
+    async (myData, { getState }) => {
+        const myBody = {
+            firstName: myData.firstname,
+            lastName: myData.lastname
+        }
+        console.log(myBody)
+        const { auth } = getState()
         try {
-            const { auth } = getState()
-            const myFetchCalls = new FetchCalls()
-            const response = await myFetchCalls.updateUserName(auth.token, data.firstname, data.lastname) //JSON.parse(auth.token) ?
-            console.log(JSON.parse(response))
-            return JSON.parse(response)
+            
+            const response = await fetch(
+                `${url}/user/profile`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Authorization': `Bearer ${auth.token}`
+                    },
+                    body: JSON.stringify(myBody)
+                }
+            )
+            const data = await response.json()
+            return data
         } catch (error) {
-            if (error.response && error.response.data.message) {
-                return rejectWithValue(error.response.body.message)
-            } else {
-                return rejectWithValue(error.message)
-            }
+            console.log(error)
         }
     }
 )

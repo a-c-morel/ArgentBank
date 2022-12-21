@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { FetchCalls } from "../../service/service"
+import { url } from "../../service/api"
 
 const initialState = {
     token: localStorage.getItem('token'),
@@ -10,8 +10,6 @@ const initialState = {
     loginStatus: null,
     loginError: null,
     userIsLoggedIn: false,
-    connectStatus: null,
-    connectError: null,
     loading: false
 }
 
@@ -24,38 +22,83 @@ password456
 
 export const authenticateUser = createAsyncThunk(
     "auth/authenticateUser",
-    async (data, { rejectWithValue }) => {
-        try {
-            const myFetchCalls = new FetchCalls()
-            const response = await myFetchCalls.userAuthentication(data)
-            console.log(response)
-            return response
-        } catch (error) {
-            if (error.response && error.response.data.message) {
-                return rejectWithValue(error.response.body.message)
-            } else {
-                return rejectWithValue(error.message)
+    async (myData, { rejectWithValue }) => { 
+        const userLoginInfo = { email: myData.email, password: myData.password }
+        const response = await fetch(
+            `${url}/user/login`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userLoginInfo),
             }
+        )
+        const data = await response.json()
+        if(data.status === 200) {
+            localStorage.setItem("token", data.body.token)
+            const userData = await getUserData(data.body.token)
+            const myPayload = {
+                token: data.body.token,
+                firstName: userData.firstName,
+                lastName: userData.lastName
+            }
+            localStorage.setItem("firstName", userData.firstName)
+            localStorage.setItem("lastName", userData.lastName)
+            return myPayload
+        } else {
+            const myError = {message: data.message}
+            console.log(myError)
+            return rejectWithValue(myError);
         }
-        
     }
 )
 
+async function getUserData(token) {
+    try {
+        const response = await fetch(
+            `${url}/user/profile`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            }
+        )
+        const data = await response.json()
+        console.log(data.body)
+        localStorage.setItem("firstName", data.body.firstName)
+        localStorage.setItem("lastName", data.body.lastName)
+        return data.body
+    } catch ( error ) {
+        console.log(error)
+    }
+}
+
 export const getUserNewName = createAsyncThunk(
     "user/getUserNewName",
-    async (token, { rejectWithValue }) => {
+    async (_, { getState, rejectWithValue }) => {
+        const { auth } = getState()
+        const token = auth.token
         try {
-            //const { auth } = getState()
-            const myFetchCalls = new FetchCalls()
-            const response = await myFetchCalls.getUserData(token)
-            console.log(response)
-            return response
+            const response = await fetch(
+                `${url}/user/profile`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+            )
+            const data = await response.json()
+            console.log(data.body)
+            localStorage.setItem("firstName", data.body.firstName)
+            localStorage.setItem("lastName", data.body.lastName)
+            return data.body
         } catch (error) {
-            if (error.response && error.response.data.message) {
-                return rejectWithValue(error.response.body.message)
-            } else {
-                return rejectWithValue(error.message)
-            }
+            console.log(error)
         }
         
     }
@@ -77,30 +120,27 @@ const authSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase( authenticateUser.pending, (state, action) =>
             {
-                state.connectStatus = "pending"
-                state.connectError = false
+                state.loginStatus = "pending"
+                state.loginError = null
                 state.loading = true
             }
         )
         builder.addCase( authenticateUser.fulfilled, ( state, action ) =>
             {
-                console.log(action.payload)
-                if(action.payload) {
-                    state.token = action.payload.token
-                    state.firstName = action.payload.firstName
-                    state.lastName = action.payload.lastName
-                    state.connectStatus = "success"
-                    state.userIsLoggedIn = true
-                    state.loading = false
-                } else {
-                    console.log("Payload is empty")
-                }
+                console.log("fullfiled", action.payload)
+                state.token = action.payload.token
+                state.firstName = action.payload.firstName
+                state.lastName = action.payload.lastName
+                state.loginStatus = "success"
+                state.userIsLoggedIn = true
+                state.loading = false
             }
         )
         builder.addCase( authenticateUser.rejected, ( state, action ) =>
             {
-                state.connectStatus = "rejected"
-                state.connectError = action.payload
+                console.log(action.payload)
+                state.loginStatus = "rejected"
+                state.loginError = action.payload.message
                 state.loading = false
             }
         )
