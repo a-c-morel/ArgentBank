@@ -34,6 +34,7 @@ function ProfilePage() {
   }
 
   useEffect(() => {
+    document.title = 'ArgentBank - Profile'
     setUserName(() => {
       if (token) {
         return {firstName: firstName, lastName: lastName}

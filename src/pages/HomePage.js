@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import FeatureItem from '../components/FeatureItem'
 
 function HomePage() {
+
+  useEffect(() => {
+    document.title = 'ArgentBank - Home'
+}, [])
 
   return (
     <>

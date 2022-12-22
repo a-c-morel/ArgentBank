@@ -19,6 +19,7 @@ function LoginPage() {
   }
 
   useEffect(() => {
+    document.title = 'ArgentBank - Login'
     if(token){
       navigate('/profile')
     }
