@@ -2,14 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AccountContent from '../components/AccountContent'
 import { useForm } from 'react-hook-form'
-import { updateUserName } from '../features/auth/authSlice'
-import { getUserNewName } from '../features/auth/authSlice'
+import { updateUserName, getUserNewName } from '../features/auth/authSlice'
 
 function ProfilePage() {
 
-  const { firstName } = useSelector((state) => state.auth)
-  const { lastName } = useSelector((state) => state.auth)
-  const { token } = useSelector((state) => state.auth)
+  const { firstName, lastName, token } = useSelector((state) => state.auth)
   
   const dispatch = useDispatch()
   const { register, handleSubmit } = useForm()

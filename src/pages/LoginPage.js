@@ -11,8 +11,7 @@ function LoginPage() {
   const navigate = useNavigate()
 
   const { register, handleSubmit } = useForm()
-  const { token } = useSelector((state) => state.auth)
-  const { loginError } = useSelector((state) => state.auth)
+  const { token, loginError } = useSelector((state) => state.auth)
   
   const submitForm = (data) => {
     dispatch(authenticateUser(data))
