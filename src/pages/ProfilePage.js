@@ -61,7 +61,6 @@ function ProfilePage() {
                   <input type="text" id="lastname" className="update-name__input" placeholder={userName.lastName} {...register('lastname')} />
                   <button className="edit-name-button" onClick={ () => setEditInputsDisplayed(false) } >Cancel</button>
                 </div>
-                
               </form>
               </>
             ) :
