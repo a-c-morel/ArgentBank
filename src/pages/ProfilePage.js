@@ -14,13 +14,12 @@ function ProfilePage() {
   const dispatch = useDispatch()
   const { register, handleSubmit } = useForm()
   const [editInputsDisplayed, setEditInputsDisplayed] = useState(false)
-  const [userName, setUserName] = useState(() => {
-    if(token){
-      return {firstName: firstName, lastName: lastName}
-    } else {
-      return {firstName: null, lastName: null}
+  const [userName, setUserName] = useState(
+    {
+      firstName: firstName,
+      lastName: lastName
     }
-  })
+  )
 
   const showEditInputs = () => {
     setEditInputsDisplayed(true)
