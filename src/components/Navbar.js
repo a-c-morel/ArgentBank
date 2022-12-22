@@ -30,7 +30,7 @@ function Navbar() {
             </div>
           ) : (
             <div className="signout-container">
-              <Link to="/user" className="main-nav-item">
+              <Link to="/profile" className="main-nav-item">
                 <FaUserCircle size={18} />
                 {`${firstName}`}
               </Link>

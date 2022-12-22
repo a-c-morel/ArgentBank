@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { url } from "../../service/api"
+import { url } from "../../utils/api"
 
 const initialState = {
     token: localStorage.getItem('token'),
