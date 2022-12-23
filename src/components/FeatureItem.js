@@ -3,6 +3,10 @@ import iconChat from "../assets/icon-chat.png"
 import iconMoney from "../assets/icon-money.png"
 import iconSecurity from "../assets/icon-security.png"
 
+/**
+ * @param {string} feature 
+ * @returns {HTMLElement} Div containing a description of the advantages of using the app
+ */
 function FeatureItem({ feature }) {
   
   if ( feature === "chat" ) {

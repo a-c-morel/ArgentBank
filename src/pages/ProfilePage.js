@@ -6,10 +6,10 @@ import { updateUserName, getUserNewName } from '../features/auth/authSlice'
 
 function ProfilePage() {
 
-  const { firstName, lastName, token } = useSelector((state) => state.auth)
+  const { firstName, lastName } = useSelector((state) => state.auth)
   
   const dispatch = useDispatch()
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit } = useForm() //cf. https://www.react-hook-form.com/api/useform/
   const [editInputsDisplayed, setEditInputsDisplayed] = useState(false)
   const [userName, setUserName] = useState(
     {
@@ -22,23 +22,18 @@ function ProfilePage() {
     setEditInputsDisplayed(true)
   }
 
+  //data = {firstName: string, lastName: string}
   const submitForm = (data) => {
     dispatch(updateUserName(data)).then(() => {
       setEditInputsDisplayed(false)
-      dispatch(getUserNewName(token))
+      dispatch(getUserNewName())
     })
   }
 
   useEffect(() => {
     document.title = 'ArgentBank - Profile'
-    setUserName(() => {
-      if (token) {
-        return {firstName: firstName, lastName: lastName}
-      } else {
-        return {firstName: null, lastName: null}
-      }
-    })
-  }, [firstName, lastName, token])
+    setUserName({firstName: firstName, lastName: lastName})
+  }, [firstName, lastName])
   
 
   return (

@@ -1,5 +1,9 @@
 import React from 'react'
 
+/**
+ * @param {string} accountType 
+ * @returns {HTMLElement} Section containing accounts informations
+ */
 function AccountContent({ accountType }) {
 
     let accountTitle

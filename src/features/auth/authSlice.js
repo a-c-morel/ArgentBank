@@ -1,5 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { url } from "../../utils/api"
+
+/*This project uses Redux Toolkit. See more at https://redux-toolkit.js.org/ */
+
+const url = "http://localhost:3001/api/v1" //cf. swagger : http://localhost:3001/api-docs/
 
 const initialState = {
     token: localStorage.getItem('token'),
@@ -12,6 +15,7 @@ const initialState = {
 
 export const authenticateUser = createAsyncThunk(
     "auth/authenticateUser",
+    //myData = {email: string - user's email, password: string - user's password}
     async (myData, { rejectWithValue }) => { 
         const userLoginInfo = { email: myData.email, password: myData.password }
         const response = await fetch(
@@ -24,22 +28,25 @@ export const authenticateUser = createAsyncThunk(
                 body: JSON.stringify(userLoginInfo),
             }
         )
-        const data = await response.json()
+        const data = await response.json() //cf. http://localhost:3001/api-docs/#/User%20Module/post_user_login
         if(data.status === 200) {
-            const token = data.body.token
+            const token = data.body.token //string
             localStorage.setItem("token", token)
-            const userData = await getUserData(token)
+            const userData = await getUserData(token) //cf. http://localhost:3001/api-docs/#/User%20Module/post_user_profile
             const myPayload = {
-                token: token,
-                firstName: userData.firstName,
-                lastName: userData.lastName
+                token: token, //string
+                firstName: userData.firstName, //string
+                lastName: userData.lastName //string
             }
             localStorage.setItem("firstName", userData.firstName)
             localStorage.setItem("lastName", userData.lastName)
             return myPayload
         } else {
-            const myError = {message: data.message}
+            const myError = {message: data.message} 
             console.log(myError)
+            /*the error message is dynamically retreived from the API response,
+            so that the user can know what to modify (if email exists but password doesn't match,
+            for example)*/
             return rejectWithValue(myError);
         }
     }
@@ -57,7 +64,7 @@ async function getUserData(token) {
                 }
             }
         )
-        const data = await response.json()
+        const data = await response.json() //cf. http://localhost:3001/api-docs/#/User%20Module/post_user_profile
         const userInfo = data.body
         localStorage.setItem("firstName", userInfo.firstName)
         localStorage.setItem("lastName", userInfo.lastName)
@@ -69,6 +76,7 @@ async function getUserData(token) {
 
 export const updateUserName = createAsyncThunk(
     "auth/updateUserName",
+    //myData = {firstName: string, lastName: string}
     async (myData, { getState }) => {
         const myBody = {
             firstName: myData.firstname,
@@ -76,7 +84,6 @@ export const updateUserName = createAsyncThunk(
         }
         const { auth } = getState()
         try {
-            
             const response = await fetch(
                 `${url}/user/profile`,
                 {
@@ -88,7 +95,7 @@ export const updateUserName = createAsyncThunk(
                     body: JSON.stringify(myBody)
                 }
             )
-            const data = await response.json()
+            const data = await response.json() //cf. http://localhost:3001/api-docs/#/User%20Module/put_user_profile
             return data
         } catch (error) {
             console.log(error)
@@ -96,6 +103,10 @@ export const updateUserName = createAsyncThunk(
     }
 )
 
+/*This asyncThunk is quite the same as getUserData function,
+but the token is retrieved with a getState inside the function
+instead of being passed as a parameter,
+and the returned payload is used to replace firstName and lastName in the state*/
 export const getUserNewName = createAsyncThunk(
     "user/getUserNewName",
     async (_, { getState }) => {
@@ -112,7 +123,7 @@ export const getUserNewName = createAsyncThunk(
                     }
                 }
             )
-            const data = await response.json()
+            const data = await response.json() //cf. http://localhost:3001/api-docs/#/User%20Module/post_user_profile
             const userInfo = data.body
             localStorage.setItem("firstName", userInfo.firstName)
             localStorage.setItem("lastName", userInfo.lastName)
@@ -128,6 +139,8 @@ const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
+        /*This reducer removes every sensitive info from localStorage and from state
+        (user is no more authenticated)*/
         signOut: (state) => {
             let keysToRemove = ["token", "firstName", "lastName"]
             keysToRemove.forEach(key => localStorage.removeItem(key))

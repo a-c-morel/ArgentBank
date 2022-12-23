@@ -10,9 +10,10 @@ function LoginPage() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit } = useForm() //cf. https://www.react-hook-form.com/api/useform/
   const { token, loginError } = useSelector((state) => state.auth)
   
+  //data = {email: string, password: string}
   const submitForm = (data) => {
     dispatch(authenticateUser(data))
   }
@@ -44,6 +45,9 @@ function LoginPage() {
               <label htmlFor="remember-me">Remember me</label>
             </div>
             <button className="sign-in-button" type='submit'>Sign In</button>
+            {/*the error message is dynamically retreived from the API response,
+            so that the user can know what to modify (if email exists but password doesn't match,
+            for example)*/}
             { (loginError) && (<div className='login-error'>{loginError}</div>) }
           </form>
         </section>
