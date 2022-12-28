@@ -42,8 +42,8 @@ export const authenticateUser = createAsyncThunk(
             localStorage.setItem("lastName", userData.lastName)
             return myPayload
         } else {
+            console.log(data)
             const myError = {message: data.message} 
-            console.log(myError)
             /*the error message is dynamically retreived from the API response,
             so that the user can know what to modify (if email exists but password doesn't match,
             for example)*/
