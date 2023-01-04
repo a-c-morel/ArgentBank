@@ -19,17 +19,17 @@ Change your directory to the name of the cloned folder.
 
 For example, if folder name is "my-new-app"
 
-### 1.3 Launching the frontend
-
-Make sure the previous steps are successful.
-
-Then, if not already done, install and launch the backend API on port 3001. (to install and launch the backend, see : https://github.com/a-c-morel/MORELAdeline_13_08112022_backend)
-
 `cd my-new-app`
 
 You can now run `npm install`
 
 It should create a package-lock.json and a node_modules files inside your directory.
+
+### 1.3 Launching the frontend
+
+Make sure the previous steps are successful.
+
+Then, if not already done, install and launch the backend API on port 3001. (to install and launch the backend, see : https://github.com/a-c-morel/MORELAdeline_13_08112022_backend)
 
 Follow the backend Readme and wait to see the message "Database successfully connected" in the backend directory terminal.
 
