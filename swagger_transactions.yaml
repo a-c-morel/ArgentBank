@@ -1,0 +1,218 @@
+openapi: 3.0.1
+info:
+  title: Bank Argent API documentation
+  description: Contains all available API endpoints in this codebase
+  termsOfService: http://swagger.io/terms/
+  version: 1.0.11
+servers:
+- url: http://localhost:3001/api/v1
+paths:
+  /user/accounts/{accountID}:
+    get:
+      tags:
+      - Transactions Module
+      summary: User Transactions API
+      description: Fetch a list of user’s transactions for the current month, from
+        a specific account
+      parameters:
+      - name: Authorization
+        in: header
+        description: Attach Bearer JWT token
+        required: true
+        schema:
+          type: string
+      - name: accountID
+        in: path
+        description: ID of the account
+        required: true
+        schema:
+          type: string
+      - name: currentDate
+        in: query
+        description: The current year and month
+        required: true
+        schema: {}
+      responses:
+        200:
+          description: User account retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        400:
+          description: Invalid Fields
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+  /user/account/{accountID}/{transactionID}:
+    get:
+      tags:
+      - Transactions Module
+      summary: User Transactions API
+      description: Fetch the details of a specific transaction from a specific account
+      parameters:
+      - name: Authorization
+        in: header
+        description: Attach Bearer JWT token
+        required: true
+        schema:
+          type: string
+      - name: accountID
+        in: path
+        description: ID of the account
+        required: true
+        schema:
+          type: string
+      - name: transactionID
+        in: path
+        description: ID of the transaction
+        required: true
+        schema:
+          type: string
+      - name: currentDate
+        in: query
+        description: The current year and month
+        required: true
+        schema: {}
+      responses:
+        200:
+          description: User transaction retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        400:
+          description: Invalid Fields
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+    patch:
+      tags:
+      - Transactions Module
+      summary: User Transactions API
+      description: Update some details of a specific transaction from a specific account
+      parameters:
+      - name: Authorization
+        in: header
+        description: Attach Bearer JWT token
+        required: true
+        schema:
+          type: string
+      - name: accountID
+        in: path
+        description: ID of the account
+        required: true
+        schema:
+          type: string
+      - name: transactionID
+        in: path
+        description: ID of the transaction
+        required: true
+        schema:
+          type: string
+      - name: currentDate
+        in: query
+        description: The current year and month
+        required: true
+        schema: {}
+      requestBody:
+        description: Update user transaction attributes
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/UpdateTransaction'
+        required: true
+      responses:
+        200:
+          description: User transaction updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateTransactionResponse'
+        400:
+          description: Invalid Fields
+          content: {}
+        500:
+          description: Internal Server Error
+          content: {}
+      x-codegen-request-body-name: body
+components:
+  schemas:
+    AccountResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+        body:
+          type: object
+          properties:
+            transactions:
+              type: array
+              items:
+                type: object
+                properties:
+                  date:
+                    type: string
+                  description:
+                    type: string
+                  amount:
+                    type: integer
+                  balance:
+                    type: integer
+    TransactionResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+        body:
+          type: object
+          properties:
+            date:
+              type: string
+            description:
+              type: string
+            amount:
+              type: integer
+            balance:
+              type: integer
+            transactionType:
+              type: string
+            category:
+              type: string
+            notes:
+              type: array
+              items:
+                type: object
+                properties:
+                  note:
+                    type: string
+    UpdateTransaction:
+      type: object
+      properties:
+        category:
+          type: string
+        notes:
+          type: array
+          items:
+            type: object
+            properties:
+              note:
+                type: string
+    UpdateTransactionResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
